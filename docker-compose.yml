@@ -1,0 +1,48 @@
+version: "3.7"
+
+services:
+  wordpress:
+    image: wordpress
+    ports:
+      - 8001:80
+    environment:
+      WORDPRESS_DB_PASSWORD: example
+      WORDPRESS_DEBUG: 1
+      WORDPRESSS_DEBUG_LOG: example
+      ABSPATH: /usr/src/wordpress/
+    volumes:
+      - wordpress:/var/www/html
+      - .:/var/www/html/wp-content/plugins/plugin-name
+
+  cli:
+    image: wordpress:cli
+    volumes:
+      - wordpress:/var/www/html
+      - .:/var/www/html/wp-content/plugins/plugin-name
+    environment:
+      WORDPRESS_DB_PASSWORD: example
+      ABSPATH: /usr/src/wordpress/
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: wordpress_test
+
+  wordpress_phpunit:
+    build:
+      context: ./
+      dockerfile: DOCKERFILE
+    environment:
+      PHPUNIT_DB_HOST: mysql
+    volumes:
+      - .:/app
+      - testsuite:/tmp
+
+  composer:
+    image: composer
+    volumes:
+      - .:/app
+
+volumes:
+  testsuite:
+  wordpress:

@@ -16,6 +16,56 @@ docker pull docker.pkg.github.com/shelob9/wordpress-phpunit/wordpress-phpunit:0.
 
 ### docker-compose
 
+This example might work, not sure. Good luck.
+
+```yml
+version: "3.7"
+
+services:
+  wordpress:
+    image: wordpress
+    ports:
+      - 8111:80
+    environment:
+      WORDPRESS_DB_PASSWORD: example
+      WORDPRESS_DEBUG: 1
+      WORDPRESSS_DEBUG_LOG: example
+      ABSPATH: /usr/src/wordpress/
+    volumes:
+      - wordpress:/var/www/html
+      - ./:/var/www/html/wp-content/plugins/plugin-name
+  cli:
+    image: wordpress:cli
+    volumes:
+      - wordpress:/var/www/html
+      - ./:/var/www/html/wp-content/plugins/plugin-name
+    environment:
+      WORDPRESS_DB_PASSWORD: example
+      ABSPATH: /usr/src/wordpress/
+  wordpress_phpunit:
+    build:
+      context: ./
+      dockerfile: WPTESTS
+    environment:
+      PHPUNIT_DB_HOST: mysql
+    volumes:
+      - .:/app
+      - testsuite:/tmp
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: wordpress_test
+  composer:
+    image: composer
+    volumes:
+      - .:/app
+
+volumes:
+  wordpress:
+  testsuite:
+```
+
 ### Setting Up Docker
 
 You must be logged in to Github docker registry to pull this image. Sorry, but you have to.

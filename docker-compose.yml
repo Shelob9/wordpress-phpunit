@@ -31,7 +31,6 @@ services:
   wordpress_phpunit:
     build:
       context: ./
-      dockerfile: DOCKERFILE
     environment:
       PHPUNIT_DB_HOST: mysql
     volumes:

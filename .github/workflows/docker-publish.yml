@@ -30,11 +30,9 @@ jobs:
         run: |
           if [ -f docker-compose.test.yml ]; then
             docker-compose --file docker-compose.test.yml build
-            docker-compose --file docker-compose.test.yml run sut
           else
-            docker build . --file DOCKERFILE
-            docker-compose docker-compose.yml build
-            docker-compose --file docker-compose.yml run sut
+            docker-compose build
+            docker-compose run --rm wordpress_phpunit bash bin/install-wp-tests.sh
           fi
 
   # Push image to GitHub Packages.

@@ -1,0 +1,1 @@
+FROM docker.pkg.github.com/shelob9/wordpress-phpunit/wordpress-phpunit:latest
